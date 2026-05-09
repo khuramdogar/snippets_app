@@ -81,6 +81,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: snippets_app_test
+          DEVISE_JWT_SECRET_KEY: test-devise-jwt-secret-key
         run: bin/rails db:test:prepare test
         working-directory: backend
 
