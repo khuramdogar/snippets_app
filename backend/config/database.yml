@@ -1,21 +1,21 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  pool: <%= ENV["RAILS_MAX_THREADS"] { 5 } %>
-  username: <%= ENV["POSTGRES_USER"] %>
-  password: <%= ENV["POSTGRES_PASSWORD"] %>
-  host: <%= ENV["POSTGRES_HOST"] %>
-  port: <%= ENV["POSTGRES_PORT"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  username: <%= ENV.fetch("POSTGRES_USER", "postgres") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "") %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+  port: <%= ENV.fetch("POSTGRES_PORT", 5432) %>
   sslmode: disable
 
 development:
   <<: *default
-  database: snippets_app_development
+  database: <%= ENV.fetch("POSTGRES_DB", "snippets_app_development") %>
 
 test:
   <<: *default
-  database: ssnippets_app_test
+  database: <%= ENV.fetch("POSTGRES_DB", "snippets_app_test") %>
 
 production:
   <<: *default
-  database: snippets_app_production
+  database: <%= ENV.fetch("POSTGRES_DB", "snippets_app_production") %>
