@@ -28,12 +28,13 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: dev
     ports:
       - "3001:3001"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    command: npm run dev
+    command: npm run dev -- --hostname 0.0.0.0
 
 volumes:
   db_data:
