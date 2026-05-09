@@ -1,0 +1,159 @@
+.card {
+  break-inside: avoid;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+  margin: 0 0 22px;
+  overflow: hidden;
+}
+
+.preview_button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  display: block;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.editor_header {
+  align-items: center;
+  background: #050505;
+  color: #fff;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 78px 1fr;
+  min-height: 52px;
+  padding: 0 16px;
+
+  strong {
+    font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.window_controls {
+  display: flex;
+  gap: 9px;
+
+  span {
+    border-radius: 50%;
+    display: block;
+    height: 14px;
+    width: 14px;
+  }
+
+  span:nth-child(1) {
+    background: #ff5f57;
+  }
+
+  span:nth-child(2) {
+    background: #febc2e;
+  }
+
+  span:nth-child(3) {
+    background: #28c840;
+  }
+}
+
+.code_preview {
+  background: #1f1f1f;
+  color: #d1d5db;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0;
+  min-height: 180px;
+  overflow: hidden;
+  padding: 16px 18px 26px;
+  white-space: pre-wrap;
+}
+
+.card_body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+
+  p {
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.45;
+    margin: 0;
+  }
+}
+
+.meta_row {
+  color: #6b7280;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 700;
+  gap: 8px;
+
+  span {
+    background: #f3f4f6;
+    border-radius: 999px;
+    padding: 5px 9px;
+  }
+}
+
+.actions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  button {
+    background: #111827;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 800;
+    min-height: 38px;
+    padding: 8px 10px;
+  }
+
+  button:nth-child(2) {
+    background: #fc2d3a;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.active_action {
+  background: #2563eb !important;
+}
+
+.save_panel {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr auto;
+
+  select,
+  button {
+    border-radius: 6px;
+    font: inherit;
+    min-height: 38px;
+    padding: 8px 10px;
+  }
+
+  select {
+    border: 1px solid #d1d5db;
+  }
+
+  button {
+    background: #fc2d3a;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 800;
+  }
+}

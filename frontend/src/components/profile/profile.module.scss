@@ -1,0 +1,182 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 42px;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.board {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: calc(33.333% - 20px);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+
+
+.banner {
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.actions_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px; /* 30px margin top to place buttons below the banner */
+  padding: 0 20px;
+  width: 100%;
+}
+
+.actions_wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.actions {
+  display: flex;
+  gap: 20px;
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: #4396ee;
+    }
+  }
+}
+
+.dropdown_wrapper {
+  flex: 0;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 50px;
+}
+
+.dropdown {
+  position: relative;
+  button {
+    padding: 14px 35px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: #218838;
+    }
+  }
+  .dropdown_content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    a {
+      color: black;
+      padding: 14px 28px;
+      text-decoration: none;
+      display: block;
+      &:hover {
+        background-color: #f1f1f1;
+      }
+    }
+  }
+  &:hover .dropdown_content {
+    display: block;
+  }
+}
+
+// code snippets Scss
+
+.code {
+  background-color: #ffffff;
+  width: 40vh;
+  padding: 5px;
+  border-radius: 14px;
+  // border: 1px solid grey;
+}
+
+.editor_header {
+  color: white;
+  background-color: black;
+  height: 45px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.svg {
+  width: 70px;
+  padding: 10px;
+}
+.editor_bottom_container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.like_dislike_container {
+  display: flex;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.like_dislike_item {
+  padding: 5px;
+}
+
+.save_button {
+  display: flex;
+  font-size: 14px;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 35px;
+  background-color: #fd2525db;
+  color: white;
+  margin: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #fd0000;
+    color: #ffffff;
+  }
+}
+
+.btn {
+  background: #FC2D3A;
+  height: 40px;
+  border-radius: 10px;
+  border-width: 0;
+  color: #fff;
+  cursor: pointer;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 12px 0 0;
+  padding: 2;
+  text-align: center;
+  width: 12vw;
+}
+
+svg { 
+  pointer-events: auto;
+  circle {
+    cursor: pointer;
+  }
+}

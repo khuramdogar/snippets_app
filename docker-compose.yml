@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    env_file: ./backend/.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    env_file: ./backend/.env
+    # environment:
+    #   BUNDLE_FROZEN: "false"
+    ports:
+      - "3030:3030"
+    volumes:
+      - ./backend:/backend
+    command: bash -c "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0 -p 3030"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  db_data:
