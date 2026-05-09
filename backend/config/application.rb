@@ -30,7 +30,7 @@ module Backend
     config.api_only = true
     # config.middleware.delete ActionDispatch::Cookies
     # config.middleware.delete ActionDispatch::Session::CookieStore
-    config.session_store :cookie_store, key: '_interslice_session'
+    config.session_store :cookie_store, key: "_interslice_session"
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
     config.middleware.use config.session_store, config.session_options

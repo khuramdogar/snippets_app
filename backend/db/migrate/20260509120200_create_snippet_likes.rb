@@ -7,6 +7,6 @@ class CreateSnippetLikes < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :snippet_likes, [:snippet_id, :user_id], unique: true
+    add_index :snippet_likes, [ :snippet_id, :user_id ], unique: true
   end
 end

@@ -25,7 +25,7 @@ users.each do |user|
       title: "Board #{i + 1} for #{user.name}",
       description: "A sample board description",
       user: user,
-      is_public: [true, false].sample
+      is_public: [ true, false ].sample
     )
   end
 end
@@ -38,7 +38,7 @@ boards.each do |board|
       title: "Snippet #{i + 1} for #{board.title}",
       content: "Sample content for snippet #{i + 1}",
       board: board,
-      is_public: [true, false].sample
+      is_public: [ true, false ].sample
     )
   end
 end

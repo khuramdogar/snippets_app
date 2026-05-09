@@ -3,7 +3,7 @@ module Api
       module Boards
         class SnippetsController < ApplicationController
           before_action :set_board
-    
+
             def index
               @snippets = @board.snippets
               render json: @snippets
@@ -14,9 +14,9 @@ module Api
             def set_board
               @board = Board.find(params[:board_id])
               rescue ActiveRecord::RecordNotFound
-              render json: { error: 'Board not found' }, status: :not_found
+              render json: { error: "Board not found" }, status: :not_found
             end
         end
       end
     end
-  end
+end

@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
     before_action :log_params
     before_action :set_authorization_header_from_cookie
     before_action :configure_permitted_parameters, if: :devise_controller?
-    
+
 
     protected
 
@@ -20,11 +20,11 @@ class ApplicationController < ActionController::API
     end
 
     def set_authorization_header_from_cookie
-        return if request.headers['Authorization'].present?
+        return if request.headers["Authorization"].present?
 
         token = cookies[:access_token]
         return if token.blank?
 
-        request.env['HTTP_AUTHORIZATION'] ||= "Bearer #{token}"
+        request.env["HTTP_AUTHORIZATION"] ||= "Bearer #{token}"
     end
 end
