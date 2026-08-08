@@ -34,8 +34,7 @@
 /backend/config/master.key
 
 /ai-service/.env*
-/ai-service/chromadb-data
-/ai-service/chroma_data
+/ai-service/chroma_data/*
 /ai-service/snippet_env/*
 /snippet_env/*
 /venv/*
