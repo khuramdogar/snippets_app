@@ -2,46 +2,35 @@ import json
 from json import JSONDecodeError
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from langchain_core.documents import Document
+from langchain_core.runnables import RunnablePassthrough
+
+from app.services.langchain_vector_store import get_retriever
+from app.services.prompts import RAG_PROMPT
+from app.services.providers.langchain_openai_provider import get_llm
 
 from app.models.schemas import RagQueryRequest, RagQueryResponse, RagDocumentRequest, RagDocumentResponse
 from app.services.document_ingest import ingest_upload
-from app.services.embeddings import embed_chunks
-from app.services.vector_store import query_similar
-from app.services.llm import chat_completion
 
 router = APIRouter()
 
-RAG_PROMPT_TEMPLATE = """\
-Answer the question using ONLY the context below. If the context doesn't contain
-the answer, say you don't have enough information — do not make something up.
 
-Context:
-{context}
-
-Question: {question}
-
-Answer:"""
-
+def format_documents(documents: list[Document]) -> str:
+    return "\n\n---\n\n".join(
+        document.page_content
+        for document in documents
+    )
 
 @router.post("/query", response_model=RagQueryResponse)
 async def rag_query(payload: RagQueryRequest) -> RagQueryResponse:
-    # 1. Embed the question the same way we embedded the chunks at ingest time.
-    #    (embed_chunks takes a list, so wrap/unwrap a single item)
-
-    # [question_embedding] = await embed_chunks([payload.question])
-    [query_embedding] = await embed_chunks([payload.question], task_type="retrieval_query")
-    print(f"DEBUG query_embedding length: {len(query_embedding)}")  # add this line temporarily
-    # 2. Retrieve the top_k most similar chunks from Chroma
-    results = query_similar(
+    retriever = get_retriever(
         collection_name=payload.collection_name,
-        # query_embedding=query_embedding[0],
-        query_embedding=query_embedding,
         top_k=payload.top_k,
-        filters=payload.filters
     )
 
-    documents = results.get("documents", [[]])[0]
-    metadatas = results.get("metadatas", [[]])[0]
+    documents = await retriever.ainvoke(
+        payload.question
+    )
 
     if not documents:
         return RagQueryResponse(
@@ -49,22 +38,31 @@ async def rag_query(payload: RagQueryRequest) -> RagQueryResponse:
             sources=[],
         )
 
-    # 3. Build the prompt with retrieved context
-    context = "\n\n---\n\n".join(documents)
-    prompt = RAG_PROMPT_TEMPLATE.format(context=context, question=payload.question)
+    context = format_documents(documents)
 
-    # 4. Ask the LLM, grounded in only what we retrieved
-    response = await chat_completion(
-         messages=[{"role": "user", "content": prompt}],
-        temperature=0,  # deterministic — we want faithful answers, not creative ones
+    llm = get_llm(temperature=0)
+
+    response = await (
+        RAG_PROMPT
+        | llm
+    ).ainvoke(
+        {
+            "context": context,
+            "question": payload.question,
+        }
     )
 
-    sources = sorted({m["source"] for m in metadatas})
-    
-    # 5. Return the answer and sources
+    sources = sorted(
+        {
+            document.metadata.get("source")
+            for document in documents
+            if document.metadata.get("source")
+        }
+    )
+
     return RagQueryResponse(
-        answer=response,
-        sources=sources
+        answer=response.content,
+        sources=sources,
     )
 
 
