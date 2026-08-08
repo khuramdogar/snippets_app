@@ -7,14 +7,6 @@ from app.core.config import settings
 
 _client = chromadb.PersistentClient(path=settings.CHROMA_PERSIST_DIR)
 
-def get_collection(name: str = "docs") -> Collection:
-    """
-    Returns a Chroma collection for storing/retrieving embeddings.
-    Note: Chroma is a local vector database that persists to disk. In production,
-    you might use a managed vector DB like Pinecone or Weaviate instead.
-    """
-    return _client.get_collection(name=name)
-
 def add_documents(
         collection_name: str,
         ids: list[str], 
@@ -22,7 +14,8 @@ def add_documents(
         documents: list[str], 
         metadatas: list[dict],
     ) -> None:
-    collection = get_collection(collection_name)
+    lower_collection_name = collection_name.lower()
+    collection = _client.get_or_create_collection(name=lower_collection_name)
     collection.add(ids=ids, embeddings=embeddings, documents=documents, metadatas=metadatas)
 
 def query_similar(
@@ -31,6 +24,10 @@ def query_similar(
         top_k: int = 4,
         filters: dict[str, str] | None = None
     ) -> dict:
-    collection = get_collection(collection_name)
+    lower_collection_name = collection_name.lower()
+    try:
+        collection = _client.get_collection(name=lower_collection_name)
+    except chromadb.errors.NoCollectionError:
+        raise ValueError(f"Collection '{collection_name}' does not exist. Please ingest documents first.")
     return collection.query(query_embeddings=[query_embedding], n_results=top_k)
 
