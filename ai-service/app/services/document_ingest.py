@@ -6,10 +6,10 @@ from typing import Any
 from uuid import uuid4
 
 from fastapi import UploadFile
+from langchain_core.documents import Document
 
+from app.services.langchain_vector_store import get_vector_store
 from app.services.chunking import chunk_text
-from app.services.embeddings import embed_chunks
-from app.services.vector_store import add_documents
 
 ALLOWED_EXTENSIONS = {"pdf", "docx", "md", "txt", "csv", "json"}
 
@@ -93,24 +93,30 @@ async def ingest_upload(
     if not chunks:
         raise ValueError("Could not split uploaded document into chunks for ingestion.")
 
-    embeddings = await embed_chunks(chunks, task_type="retrieval_document")
-    ids = [_make_chunk_id(source, idx, chunk) for idx, chunk in enumerate(chunks)]
-    metadata = metadata or {}
-    metadatas = [
-        {
-            **metadata,
-            "source": source,
-            "chunk_index": idx,
-        }
-        for idx in range(len(chunks))
+    ids = [
+        _make_chunk_id(source, idx, chunk)
+        for idx, chunk in enumerate(chunks)
     ]
 
-    add_documents(
-        collection_name=collection_name,
+    metadata = metadata or {}
+    
+    documents = [
+        Document(
+            page_content=chunk,
+            metadata={
+                **metadata,
+                "source": source,
+                "chunk_index": idx,
+            },
+        )
+        for idx, chunk in enumerate(chunks)
+    ]
+
+    vector_store = get_vector_store(collection_name)
+
+    vector_store.add_documents(
+        documents=documents,
         ids=ids,
-        embeddings=embeddings,
-        documents=chunks,
-        metadatas=metadatas,
     )
 
     return len(chunks)
