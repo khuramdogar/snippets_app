@@ -40,21 +40,6 @@ async def chat_completion(messages: list[dict], temperature: float = 0.3) -> str
     logger.info("gemini chat_completion done | model=%s", settings.GEMINI_MODEL)
     return response.text
 
-
-# async def embed_text(text: str, task_type: str = "retrieval_document") -> list[float]:
-#     """
-#     task_type matters for Gemini specifically: embedding a document you're storing
-#     should use "retrieval_document", but embedding a user's search question should
-#     use "retrieval_query" — Gemini optimizes the vector differently for each.
-#     OpenAI has no equivalent, which is why openai_provider.py just ignores this param.
-#     """
-#     result = genai.embed_content(
-#         model=settings.GEMINI_EMBEDDING_MODEL,
-#         content=text,
-#         task_type=task_type,
-#     )
-#     return result["embedding"]
-
 async def embed_text(text: str, task_type: str = "retrieval_document") -> list[float]:
     result = genai.embed_content(
         model=settings.GEMINI_EMBEDDING_MODEL,
